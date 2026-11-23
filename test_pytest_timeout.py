@@ -795,3 +795,31 @@ def test_ini_session_timeout(pytester):
     result = pytester.runpytest_subprocess()
     result.stdout.fnmatch_lines(["*!! session-timeout: 1.0 sec exceeded !!!*"])
     result.assert_outcomes(passed=1)
+
+
+@pytest.mark.parametrize(
+    ("ini_timeout", "args"),
+    [
+        (None, ["--session-timeout=0"]),
+        (0, []),
+        (1, ["--session-timeout=0"]),
+    ],
+    ids=["command-line", "ini", "command-line-overrides-ini"],
+)
+def test_session_timeout_disabled(pytester, ini_timeout, args):
+    pytester.makepyfile(
+        """
+        import time
+
+        def test_one():
+            time.sleep(2)
+
+        def test_two():
+            pass
+        """
+    )
+    if ini_timeout is not None:
+        pytester.makeini(f"[pytest]\nsession_timeout = {ini_timeout}")
+    result = pytester.runpytest_subprocess(*args)
+    result.assert_outcomes(passed=2)
+    assert result.ret == pytest.ExitCode.OK

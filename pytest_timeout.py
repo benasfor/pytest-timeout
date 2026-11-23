@@ -165,7 +165,7 @@ def pytest_configure(config):
         ini = config.getini("session_timeout")
         if ini:
             timeout = _validate_timeout(config.getini("session_timeout"), "config file")
-    if timeout is not None:
+    if timeout:
         expire_time = time.time() + timeout
     else:
         expire_time = 0

@@ -363,6 +363,9 @@ You can also set the session timeout the pytest configuration file using the ``s
       [pytest]
       session_timeout = 600
 
+A value of 0 disables the session timeout. Use ``--session-timeout=0`` to
+disable a session timeout set in the configuration file.
+
 Cooperative timeouts
 --------------------
 
@@ -395,6 +398,8 @@ Changelog
 X.Y.Z
 -----
 
+- Allow ``--session-timeout=0`` to disable the session timeout, including
+  when a timeout is set in the configuration file.
 - Preserve capture-fixture output and disable fixture capturing when reporting
   thread timeouts. Thanks Arham Begani.
 - Add support Python3.15. Thanks Vladimir Roshchin.
